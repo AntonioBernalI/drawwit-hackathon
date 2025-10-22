@@ -15,6 +15,31 @@ router.post('/api/log-message', async (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+router.get('/api/get-post-id', async (req, res) => {
+  try {
+    const { postId } = context;
+    if (!postId) {
+      return res.status(400).json({ error: 'No post ID in context' });
+    }
+    res.status(200).json({ postId });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch post ID' });
+  }
+});
+
+app.post('/api/get-hash', async (req, res) => {
+  const key = req.body.key;
+  if (typeof key !== 'string') {
+    return res.status(400).json({ error: 'Key must be a string' });
+  }
+  try {
+    const record = await redis.hGetAll(`${key}-match`);
+    res.json(record);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch hash from Redis' });
+  }
+});
+
 app.post("/api/publish-match", async (req, res) => {
   const now = new Date();
   const expireDate = new Date(
