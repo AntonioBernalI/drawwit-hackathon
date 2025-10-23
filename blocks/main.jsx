@@ -77,6 +77,11 @@ Devvit.addCustomPostType({
       onMessage: (message, hook) => {},
     });
 
+    const { mount : mountDrawwitDrawingCanvas } = useWebView({
+      url: 'drawwitCanvas.html',
+      onMessage: (message, hook) => {},
+    });
+
     if (loading) {
       return (
         <vstack width={"100%"} height={"100%"} alignment={"middle center"} backgroundColor={"#fff"}>
@@ -144,7 +149,7 @@ Devvit.addCustomPostType({
             <vstack width={"35.75757576%"} height={"100%"} >
               <hstack width={"100%"} height={"18.43137255%"} backgroundColor={"rgba(255,0,255,0.48)"}>
               </hstack>
-              <hstack width={"100%"} height={"81.56862745%"}>
+              <zstack width={"100%"} height={"81.56862745%"}>
                 <image
                   url="1010.png"
                   height="100%"
@@ -154,7 +159,17 @@ Devvit.addCustomPostType({
                   resizeMode="cover"
                   description="drawwit background"
                 />
-              </hstack>
+                <vstack height={"100%"} width={"100%"}>
+                  <hstack width={"100%"} height={"13.33%"} backgroundColor={"rgba(255,0,0,0.6)"} onPress={mountDrawwitDrawingCanvas}></hstack>
+                  <hstack width={"100%"} height={"13.33%"} backgroundColor={"rgba(255,165,0,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"14.05%"} backgroundColor={"rgba(255,255,0,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"12.01%"} backgroundColor={"rgba(0,128,0,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"12.97%"} backgroundColor={"rgba(0,0,255,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"12.97%"} backgroundColor={"rgba(75,0,130,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"15.01%"} backgroundColor={"rgba(238,130,238,0.6)"}></hstack>
+                  <hstack width={"100%"} height={"6.33%"} backgroundColor={"rgba(128,128,128,0.6)"}></hstack>
+                </vstack>
+              </zstack>
             </vstack>
           </hstack>
 

@@ -280,8 +280,8 @@ interface PlayerMatchInfo {
 ### Canvas Model
 ```typescript
 interface PixelCanvas {
-  width: 100; // Canvas width in pixels (fixed at 100)
-  height: 100; // Canvas height in pixels (fixed at 100)
+  width: 100; // canvas width in pixels (fixed at 100)
+  height: 100; // canvas height in pixels (fixed at 100)
   pixels: string[][]; // 2D array of color values [x][y] representing each pixel's color
 }
 ```

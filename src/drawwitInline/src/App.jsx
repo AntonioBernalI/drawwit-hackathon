@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import upvote from '/upvote.png'
+import DrawwitCanvas from './DrawwitCanvas.jsx';
 import './styles/App.css'
 
 function App() {
@@ -80,14 +81,26 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const postId = await fetchPostId();
-      const matchHash = await fetchMatchHash(postId);
-      await devvitLog(JSON.stringify(matchHash));
-      setMatchHash(matchHash, null, 2);
-    }
+      try {
+        const postId = await fetchPostId();
+        const record = await fetchMatchHash(postId);
+
+        const parsedRecord = {
+          ...record,
+          canvasA: typeof record.canvasA === "string" ? JSON.parse(record.canvasA) : record.canvasA,
+          canvasB: typeof record.canvasB === "string" ? JSON.parse(record.canvasB) : record.canvasB,
+        };
+
+        setMatchHash(parsedRecord);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     fetchData();
-  }, [])
+  }, []);
+
+
 
 
   return (
@@ -101,8 +114,11 @@ function App() {
         </div>
         <div className="upvote-label--a">
           <img src={upvote} alt="Logo" className="upvote-icon" />
-          <p>{matchHash.votesA}</p>
+          <p
+            className={"upvote_text"}
+          >{matchHash.votesA}</p>
         </div>
+        <DrawwitCanvas canvasRawData={matchHash.canvasA} />
       </div>
       <div className="main_drawing--b">
         <div className="drawing-label--b">
@@ -110,8 +126,11 @@ function App() {
         </div>
         <div className="upvote-label--b">
           <img src={upvote} alt="Logo" className="upvote-icon" />
-          <p>{matchHash.votesB}</p>
+          <p
+            className={"upvote_text"}
+          >{matchHash.votesB}</p>
         </div>
+        <DrawwitCanvas canvasRawData={matchHash.canvasB} />
       </div>
     </div>
   )
