@@ -1,42 +1,134 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@font-face {
+  font-family: 'Pixelify-Sans';
+  src: url('/PixelifySans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+* {
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.main {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* PROMPT */
+.prompt-container {
+  width: clamp(149.1px, 213px, 276.9px);
+  height: clamp(35.7px, 51px, 66.3px);
+  background: #ffffffFF;
+  border: 2px dashed #914ed5FF;
+  border-radius: 0px 0px 10px 10px;
+  position: absolute;
+  transform: translate(0%, -50%);
+  left: 10px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  animation: floatPrompt 3s ease-in-out infinite, glowPrompt 2s alternate infinite;
+}
+
+/* INK */
+.ink-container {
+  width: clamp(73.36px, 104.8px, 136.24px);
+  height: clamp(29.4px, 42px, 54.6px);
+  background: #000000FF;
+  border: 3px solid #914ed5FF;
+  border-radius: 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-family: 'Pixelify-Sans';
+  transform: translate(0%, -50%);
+  color: #9b39ff;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  padding-right: 7px;
+  animation: pulseInk 2.5s infinite ease-in-out, fadeIn 1s ease-out forwards;
+}
+
+/* PAINT BUTTON */
+.paint-button {
+  width: clamp(162.75px, 232.5px, 302.25px);
+  height: clamp(44.1px, 63px, 81.9px);
+  background: #914ed5FF;
+  border: 4px solid #000000FF;
+  border-radius: 15px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: bounceIn 1.2s ease-out, glowButton 2s infinite alternate;
+}
+
+.test-box{
+  width: 100vmin;
+  height: 100vmin;
+  background: #ff0000;
+}
+
+.paint-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0px 0px 20px #a962ff;
+}
+
+/* ANIMACIONES */
+@keyframes floatPrompt {
+  0%, 100% {
+    transform: translate(0%, -50%) translateY(0);
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translate(0%, -50%) translateY(-5px);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+
+
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 100%) scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -20%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
-.card {
-  padding: 2em;
-}
 
-.read-the-docs {
-  color: #888;
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

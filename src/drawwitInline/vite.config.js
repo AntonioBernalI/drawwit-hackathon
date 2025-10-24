@@ -14,9 +14,9 @@ export default defineConfig({
         index: resolve(__dirname, 'drawwitInline.html'),
       },
       output: {
-        entryFileNames: `drawwit-assets/[name].js`,
-        chunkFileNames: `drawwit-assets/[name]-[hash].js`,
-        assetFileNames: `drawwit-assets/[name]-[hash][extname]`,
+        entryFileNames: `drawwitInline-assets/[name].js`,
+        chunkFileNames: `drawwitInline-assets/[name]-[hash].js`,
+        assetFileNames: `drawwitInline-assets/[name]-[hash][extname]`,
       },
     },
   },

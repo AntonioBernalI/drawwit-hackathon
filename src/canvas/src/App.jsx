@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import "./App.css";
+import DrawwitCanvas from './DrawwitCanvas.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const emptyPixelData = Array(50).fill().map(() => Array(50).fill("#fff"));
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      {/* Todo lo que puede moverse o hacer zoom */}
+      <div className="main">
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.3}
+          maxScale={10}
+          centerOnInit={true}
+          wheel={{ step: 0.1 }}
+        >
+          <TransformComponent>
+            <DrawwitCanvas canvasRawData={emptyPixelData}>
+
+            </DrawwitCanvas>
+          </TransformComponent>
+        </TransformWrapper>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* Elementos fijos en pantalla */}
+      <motion.div className="prompt-container">Skateboard</motion.div>
+      <motion.div className="ink-container">99</motion.div>
+      <motion.div className="paint-button">Paint !</motion.div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

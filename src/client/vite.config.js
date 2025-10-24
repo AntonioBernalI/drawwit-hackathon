@@ -8,10 +8,10 @@ export default defineConfig({
     outDir: '../../dist/client',
     sourcemap: true,
     target: 'esnext',
-    assetsDir: 'drawwitInline-assets',
+    assetsDir: 'drawwit-assets',
     rollupOptions: {
       input: {
-        index: resolve(__dirname, 'drawwitInline.html'),
+        index: resolve(__dirname, 'index.html'),
       },
       output: {
         entryFileNames: `drawwit-assets/[name].js`,
