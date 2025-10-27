@@ -8,15 +8,15 @@ export default defineConfig({
     outDir: '../../dist/client',
     sourcemap: true,
     target: 'esnext',
-    assetsDir: 'drawwit-assets',
+    assetsDir: 'drawwitShop-assets',
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'drawwitShop.html'),
       },
       output: {
-        entryFileNames: `drawwit-assets/[name].js`,
-        chunkFileNames: `drawwit-assets/[name]-[hash].js`,
-        assetFileNames: `drawwit-assets/[name]-[hash][extname]`,
+        entryFileNames: `drawwitShop-assets/[name].js`,
+        chunkFileNames: `drawwitShop-assets/[name]-[hash].js`,
+        assetFileNames: `drawwitShop-assets/[name]-[hash][extname]`,
       },
     },
   },

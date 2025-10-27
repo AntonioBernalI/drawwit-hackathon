@@ -1,0 +1,112 @@
+@font-face {
+  font-family: 'Pixelify-Sans';
+  src: url('/PixelifySans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.main-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.shop-container{
+  width: 340px;
+  height: 494px;
+  background: #ffffffFF;
+  border: 2px solid #000000FF;
+  border-radius: 20px 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.welcome-message{
+  width: 289px;
+  height: 48px;
+  background: #ac68f0FF;
+  border: 2px solid #000000FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #0000004D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  font-size: 20px;
+  font-family: Pixelify-Sans;
+  color: black;
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.level-bar-main-container{
+  width: 293px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.level-text-container{
+  font-family: Pixelify-Sans;
+  color: black;
+  font-size: 20px;
+  margin-bottom: 5px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.level-bar-back{
+  width: 277px;
+  height: 28px;
+  background: #ccc;
+  border: 0.1px solid #000000FF;
+  border-radius: 20px 20px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+}
+
+.level-bar-front{
+  border-radius: 20px 20px 20px 20px;
+  background: #ac68f0;
+  border: 0.1px solid #000000FF;
+  height: 100%;
+}
+
+.minutes-elapsed-text{
+  font-family: Pixelify-Sans;
+  color: black;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.level-claim-button{
+  width: 61px;
+  height: 21.99px;
+  background: #ac68f0FF;
+  border: 2px solid #000000FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #0000004D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Pixelify-Sans;
+  font-size: 15px;
+  color: black;
+  user-select: none;
+}

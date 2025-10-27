@@ -19,12 +19,14 @@
 
 .drawwit-canvas {
   display: grid;
-  width: 100vmin;
-  height: 100vmin;
+  --gap: 2px;
+  gap: var(--gap);
+  grid-template-columns: repeat(var(--size), 1fr);
+  width: calc(var(--size) * 20px + (var(--size) - 1) * var(--gap));
+  height: calc(var(--size) * 20px + (var(--size) - 1) * var(--gap));
   background-color: #ccc;
-  gap: 1px;
-  border-radius: 12px;
 }
+
 
 .drawwit-cell {
   aspect-ratio: 1 / 1;
