@@ -71,7 +71,7 @@
 
 .level-bar-back{
   width: 277px;
-  height: 28px;
+  height: 20px;
   background: #ccc;
   border: 0.1px solid #000000FF;
   border-radius: 20px 20px 20px 20px;
@@ -109,4 +109,61 @@
   font-size: 15px;
   color: black;
   user-select: none;
+}
+
+.start-label{
+  font-family: Pixelify-Sans;
+  color: black;
+  font-size: 15px;
+  transform: translate(-50%,-50%);
+  position: absolute;
+  bottom: 5px;
+  left: 15px;
+}
+
+.goal-label{
+  font-family: Pixelify-Sans;
+  color: black;
+  font-size: 15px;
+  transform: translate(-50%,-50%);
+  position: absolute;
+  bottom: 5px;
+  right: 0px;
+}
+
+
+.goal-container{
+  width: 73px;
+  height: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  font-family: Pixelify-Sans;
+  font-size: 10px;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 21px;
+  right: -25px;
+}
+
+.start-container{
+  width: 73px;
+  height: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background-color: black;
+  border-radius: 5px;
+  font-family: Pixelify-Sans;
+  font-size: 10px;
+  position: absolute;
+  transform: translate(-50%,-50%);
+  top: 21px;
+  left: 40px;
 }

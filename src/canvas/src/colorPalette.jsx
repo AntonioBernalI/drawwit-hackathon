@@ -25,7 +25,7 @@ function ColorPalette({ colorSetterFunction, onClose,  }) { // Asegúrate de des
   const colors = [
     "#FF0000", "#FAEBD7", "#8B4513", "#00FF00", "#FF00FF", "#FFFF00", "#0000FF",
     "#008080", "#C0C0C0", "#A020F0", "#FFA500", "#006400", "#FFDAB9", "#FFC0CB",
-    "#FFFFFF", "#000000", "#800000", "#4B0082", "#A9A9A9", "#FADADD", "#696969",
+    "#fefe07", "#000000", "#800000", "#4B0082", "#A9A9A9", "#FADADD", "#696969",
     "#00FFFF", "#6B8E23", "#ADFF2F"
   ];
 

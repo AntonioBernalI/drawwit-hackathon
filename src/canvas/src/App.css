@@ -13,6 +13,7 @@
 .main {
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background: #fff;
   display: flex;
   align-items: center;
@@ -60,6 +61,15 @@
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
   padding-right: 7px;
   animation: pulseInk 2.5s infinite ease-in-out, fadeIn 1s ease-out forwards;
+}
+
+.ink-image{
+  position: absolute;
+  width: 22px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 15px;
 }
 
 .paint-button {
@@ -244,6 +254,29 @@
   100% {
     transform: translate(-50%, -50%) scale(1);
   }
+}
+
+.countdown-container{
+  width: 131px;
+  height: 84px;
+  background: #914ed5FF;
+  border: 3px solid #914ed5FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 85%;
+  top: 94px;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.countdown{
+  color: white;
 }
 
 

@@ -30,9 +30,17 @@ function LevelProgressBar({pixelsPlaced}) {
         }}>
         </div>
       </div>
-      <p className={"minutes-elapsed-text"}>pixels placed</p>
-      {/*<p className={"start-label"}>{start}</p>*/}
-      {/*<p className={"goal-label"}>{goal}</p>*/}
+      <p className={"minutes-elapsed-text"}>{`pixels placed: ${pixelsPlaced}`}</p>
+      <p className={"start-label"}>{start}</p>
+      <p className={"goal-label"}>{goal}</p>
+      <div className={"start-container"}>
+        <p>ink capacity:</p>
+        <p>{(20*level+1)+30}</p>
+      </div>
+      <div className={"goal-container"}>
+        <p>ink capacity:</p>
+        <p>{(20*(level+2))+30}</p>
+      </div>
     </div>
   );
 }

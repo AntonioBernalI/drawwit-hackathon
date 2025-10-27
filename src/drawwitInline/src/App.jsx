@@ -118,7 +118,9 @@ function App() {
             className={"upvote_text"}
           >{matchHash.votesA}</p>
         </div>
-        <DrawwitCanvas canvasRawData={matchHash.canvasA} />
+        <DrawwitCanvas
+          canvasRawData={matchHash.canvasA}
+        />
       </div>
       <div className="main_drawing--b">
         <div className="drawing-label--b">

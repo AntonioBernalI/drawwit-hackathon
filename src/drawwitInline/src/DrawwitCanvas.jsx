@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import "./styles/DrawwitCanvas.css";
+import { useMemo } from 'react';
+import './styles/DrawwitCanvas.css';
 
 function DrawwitCanvas({ canvasRawData }) {
   if (!Array.isArray(canvasRawData) || canvasRawData.length === 0) {
@@ -12,7 +12,7 @@ function DrawwitCanvas({ canvasRawData }) {
 
   const size = canvasRawData.length;
 
-  const displayData = useMemo(() => [...canvasRawData].reverse(), [canvasRawData]);
+  const displayData = useMemo(() => canvasRawData, [canvasRawData]);
 
   return (
     <div
@@ -23,11 +23,7 @@ function DrawwitCanvas({ canvasRawData }) {
     >
       {displayData.flatMap((row, y) =>
         row.map((color, x) => (
-          <div
-            key={`${x}-${y}`}
-            className="drawwit-cell"
-            style={{ backgroundColor: color }}
-          />
+          <div key={`${x}-${y}`} className="drawwit-cell" style={{ backgroundColor: color }} />
         ))
       )}
     </div>
