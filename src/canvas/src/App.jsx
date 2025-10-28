@@ -33,14 +33,14 @@ function App() {
   const [ink, setInk] = useState("");
 
 
-  async function addInk(quantity) {
+  async function addInk(amount) {
     try {
       const response = await fetch('/api/add-ink', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ quantity }),
+        body: JSON.stringify({ amount }), // 👈 CAMBIO AQUÍ
       });
 
       const data = await response.json();
@@ -56,6 +56,8 @@ function App() {
       console.log('Error in addInk:', err.message);
     }
   }
+
+
 
   async function devvitLog(message) {
     const response = await fetch('/api/log-message', {
@@ -86,6 +88,27 @@ function App() {
       await devvitLog('Ink updated successfully (update-ink)');
     } catch (error) {
       await devvitLog(`Failed to update ink: ${error}`);
+      console.error(error);
+    }
+  }
+
+  async function updateLastInkCheck() {
+    try {
+      const response = await fetch('/api/update-last-ink-check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      await devvitLog(`✅ Last ink check updated for ${data.username} at ${data.lastInkCheck}`);
+    } catch (error) {
+      await devvitLog(`❌ Failed to update last ink check: ${error}`);
       console.error(error);
     }
   }
@@ -186,8 +209,16 @@ function App() {
 
   useEffect(() => {
     const run = async () => {
+      await devvitLog("running run()...")
       await addInk(1);
-      setInk(ink+1);
+      await updateLastInkCheck();
+      try {
+        const ink = await fetchInk();
+        setInk(ink);
+        await devvitLog(`succesfully added ink every second: ${ink}`);
+      } catch (error) {
+        await devvitLog(`error occurred while adding ink: ${error}`);
+      }
     };
 
     const secondInterval = setInterval(() => {

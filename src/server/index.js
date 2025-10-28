@@ -12,7 +12,7 @@ const router = express.Router();
 async function initializeInk(username){
   const now = new Date();
   await redis.set(`${username}-lastInkCheck`, now.toString());
-  await redis.set(`${username}-ink`, '50');
+  await redis.set(`${username}-ink`, '30');
   await redis.set(`${username}-pixelsPlaced`, "0");
 }
 
@@ -142,6 +142,47 @@ async function addInk(username, quantity) {
   return updatedInk;
 }
 
+router.post('/api/add-ink', async (req, res) => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { amount } = req.body;
+
+    if (typeof amount !== 'number' || amount <= 0) {
+      return res.status(400).json({ error: 'Invalid ink amount' });
+    }
+
+    const key = `${username}-ink`;
+    const exists = await redis.exists(key);
+
+    if (exists === 0) {
+      await initializeInk(username);
+    }
+
+    let currentInk = Number(await redis.get(key));
+
+    const updatedInk = await addInk(username, amount);
+
+    let pixelsPlaced = Number(await redis.get(`${username}-pixelsPlaced`));
+    const level = gamma(pixelsPlaced);
+    const limit = (20 * level + 1) + 30;
+
+    if (updatedInk > limit) {
+      await redis.set(key, String(limit - 1));
+      return res.status(200).json({ ink: limit - 1 });
+    }
+
+    return res.status(200).json({ ink: updatedInk });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 router.get('/api/get-ink', async (_req, res) => {
   try {
     const username = await reddit.getCurrentUsername();
@@ -153,7 +194,7 @@ router.get('/api/get-ink', async (_req, res) => {
     let ink;
     if (exists === 0) {
       await initializeInk(username);
-      ink = "50";
+      ink = "30";
     } else {
       ink = await redis.get(key);
     }
@@ -185,7 +226,7 @@ router.post('/api/update-ink', async (_req, res) => {
 
     if (exists === 0) {
       await initializeInk(username);
-      ink = 50;
+      ink = 30;
     } else {
       const tempInk = await redis.get(`${username}-ink`);
       const lastInkCheckDate = await redis.get(`${username}-lastInkCheck`);
@@ -219,6 +260,26 @@ router.post('/api/update-ink', async (_req, res) => {
     return res.status(200).json({ success: true, username, ink });
   } catch (error) {
     console.error("[ERROR] /api/update-ink:", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/api/update-last-ink-check', async (_req, res) => {
+  try {
+    console.log("=== /api/update-last-ink-check START ===");
+
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const now = new Date();
+    await redis.set(`${username}-lastInkCheck`, now.toString());
+
+    console.log(`[OK] Updated lastInkCheck for ${username}: ${now}`);
+    return res.status(200).json({ success: true, username, lastInkCheck: now });
+  } catch (error) {
+    console.error("[ERROR] /api/update-last-ink-check:", error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
