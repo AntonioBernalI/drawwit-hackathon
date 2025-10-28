@@ -35,7 +35,6 @@ const createPost = async (context) => {
   return post;
 };
 
-// Add a menu item to the subreddit menu for instantiating the new experience post
 Devvit.addMenuItem({
   label: 'Add my post',
   location: 'subreddit',
@@ -69,6 +68,32 @@ Devvit.addCustomPostType({
       async () => {
         const screen = await _context.redis.get(`${postId}-screen`);
         return screen ?? null;
+      }
+    );
+
+    const [upperPanel, setUpperPanel] = useState("00");
+    const [lowerPanel, setLowerPanel] = useState("00");
+
+    const { data: panel, loadingPanel, errorPanel } = useAsync(
+      async () => {
+        const username = await _context.reddit.getCurrentUsername();
+        const key = `${username}-${postId}-upvotes`;
+        const exists = await _context.redis.exists(key);
+        if (exists === 0) {
+          await _context.redis.set(key, "0000");
+          return "0000";
+        } else {
+          const panel = await _context.redis.get(key);
+          return panel ?? null;
+        }
+      },
+      {
+        finally: (panel) => {
+          if (panel) {
+            setUpperPanel(panel.slice(0, 2));
+            setLowerPanel(panel.slice(2));
+          }
+        }
       }
     );
 
@@ -148,7 +173,7 @@ Devvit.addCustomPostType({
             resizeMode="cover"
             description="drawwit background"
           />
-          <hstack width={"330px"} height={"510px"} backgroundColor={"#0f0"}>
+          <hstack width={"330px"} height={"510px"}>
             <webview width={"64.24242424%"} height={"100%"} url={"drawwitInline.html"}>
             </webview>
             <vstack width={"35.75757576%"} height={"100%"} >
@@ -156,7 +181,7 @@ Devvit.addCustomPostType({
               </hstack>
               <zstack width={"100%"} height={"81.56862745%"}>
                 <image
-                  url="1010.png"
+                  url={`${upperPanel}${lowerPanel}.png`} //
                   height="100%"
                   width="100%"
                   imageWidth={118}
@@ -167,17 +192,99 @@ Devvit.addCustomPostType({
                 <vstack height={"100%"} width={"100%"}>
                   <hstack width={"100%"} height={"13.33%"}  onPress={mountDrawwitDrawingCanvas}></hstack>
                   <hstack width={"100%"} height={"13.33%"} ></hstack>
-                  <hstack width={"100%"} height={"14.05%"} ></hstack>
+                  <hstack width={"100%"} height={"14.05%"}>
+                    <hstack
+                      width={"50%"}
+                      height={"100%"}
+                      onPress={async () => {
+                        const username = await _context.reddit.getCurrentUsername();
+                        const [A, B] = upperPanel;
+                        const toggledA = A === "1" ? "0" : "1";
+                        const toggledB = toggledA === "1" ? "0" : B;
+                        const newUpperPanel = `${toggledA}${toggledB}`;
+                        const newPanelState = `${newUpperPanel}${lowerPanel}`;
+                        setUpperPanel(newUpperPanel);
+                        await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
+
+                        if(newUpperPanel==="10"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesA', 1);
+                        }else if (newUpperPanel==="01"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesA', -1);
+                        }
+
+                      }}
+                    >
+                    </hstack>
+                    <hstack
+                      width={"50%"}
+                      height={"100%"}
+                      onPress={async () => {
+                        const username = await _context.reddit.getCurrentUsername();
+                        const [A, B] = upperPanel;
+                        const toggledB = B === "1" ? "0" : "1";
+                        const toggledA = toggledB === "1" ? "0" : A;
+                        const newUpperPanel = `${toggledA}${toggledB}`;
+                        const newPanelState = `${newUpperPanel}${lowerPanel}`;
+                        setUpperPanel(newUpperPanel);
+                        await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
+
+                        if(newUpperPanel==="10"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesA', 1);
+                        }else if (newUpperPanel==="01"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesA', -1);
+                        }
+
+                      }}
+                    >
+                    </hstack>
+                  </hstack>
                   <hstack width={"100%"} height={"12.01%"}  ></hstack>
                   <hstack width={"100%"} height={"12.97%"} ></hstack>
                   <hstack width={"100%"} height={"12.97%"} ></hstack>
-                  <hstack width={"100%"} height={"15.01%"} ></hstack>
+                  <hstack width={"100%"} height={"15.01%"} >
+                    <hstack
+                      width={"50%"}
+                      height={"100%"}
+                      onPress={async () => {
+                        const username = await _context.reddit.getCurrentUsername();
+                        const [A, B] = lowerPanel;
+                        const toggledA = A === "1" ? "0" : "1";
+                        const toggledB = toggledA === "1" ? "0" : B;
+                        const newLowerPanel = `${toggledA}${toggledB}`;
+                        const newPanelState = `${upperPanel}${newLowerPanel}`;
+                        setLowerPanel(newLowerPanel);
+                        await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
+
+                        if(newLowerPanel==="10"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesB', 1);
+                        }else if (newLowerPanel==="01"){
+                          await redis.hIncrBy(`${post.id}-match`, 'votesB', -1);
+                        }
+
+                      }}
+                    >
+                    </hstack>
+                    <hstack
+                      width={"50%"}
+                      height={"100%"}
+                      onPress={async () => {
+                        const username = await _context.reddit.getCurrentUsername();
+                        const [A, B] = lowerPanel;
+                        const toggledB = B === "1" ? "0" : "1";
+                        const toggledA = toggledB === "1" ? "0" : A;
+                        const newLowerPanel = `${toggledA}${toggledB}`;
+                        const newPanelState = `${upperPanel}${newLowerPanel}`;
+                        setLowerPanel(newLowerPanel);
+                        await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
+                      }}
+                    >
+                    </hstack>
+                  </hstack>
                   <hstack width={"100%"} height={"6.33%"} ></hstack>
                 </vstack>
               </zstack>
             </vstack>
           </hstack>
-
         </zstack>
       )
     }
