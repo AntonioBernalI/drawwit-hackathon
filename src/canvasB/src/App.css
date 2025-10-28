@@ -1,0 +1,287 @@
+@font-face {
+  font-family: 'Pixelify-Sans';
+  src: url('/PixelifySans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.prompt-container {
+  width: clamp(149.1px, 213px, 276.9px);
+  height: clamp(35.7px, 51px, 66.3px);
+  background: #ffffffFF;
+  border: 2px dashed #914ed5FF;
+  border-radius: 0px 0px 10px 10px;
+  position: absolute;
+  transform: translate(0%, -50%);
+  left: 10px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  animation: floatPrompt 3s ease-in-out infinite, glowPrompt 2s alternate infinite;
+}
+
+.ink-container {
+  width: clamp(73.36px, 104.8px, 136.24px);
+  height: clamp(29.4px, 42px, 54.6px);
+  background: #000000FF;
+  border: 3px solid #914ed5FF;
+  border-radius: 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  right: 10px;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-family: 'Pixelify-Sans';
+  transform: translate(0%, -50%);
+  color: #9b39ff;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  padding-right: 7px;
+  animation: pulseInk 2.5s infinite ease-in-out, fadeIn 1s ease-out forwards;
+}
+
+.ink-image{
+  position: absolute;
+  width: 22px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 15px;
+}
+
+.paint-button {
+  width: clamp(162.75px, 232.5px, 302.25px);
+  height: clamp(44.1px, 63px, 81.9px);
+  background: #914ed5FF;
+  border: 4px solid #000000FF;
+  border-radius: 15px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  font-size: 25px;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: bounceIn 0.5s ease-out, glowButton 2s infinite alternate;
+}
+
+.test-box{
+  width: 100vmin;
+  height: 100vmin;
+  background: #ff0000;
+}
+
+.paint-button:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0px 0px 20px #a962ff;
+}
+
+
+.paint-palette{
+  width: 333px;
+  height: 134px;
+  background: #eeeeeeFF;
+  border: 2px solid #000000FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  display : flex;
+  justify-content: center;
+  padding-top: 6px;
+  align-items: flex-start;
+  position: absolute;
+  z-index: 99;
+  transform: translate(-50%,-50%);
+  bottom: -40px;
+  left: 50%;
+  overflow: visible;
+}
+
+.paint-palette-grid{
+  width: 283px;
+  height: 105px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); /* 8 columnas del mismo ancho */
+  grid-template-rows: repeat(3, 1fr);  /* 3 filas de 150px cada una */
+  gap: 5px;
+}
+
+.paint-pallete-grid_cell--selected {
+  border: 2.5px solid #4cbaff;
+  border-radius: 7px;
+  box-shadow: 0 0 10px #4cbaff;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+
+  @media (max-width: 710px) {
+    border: 3px solid #4cbaff;
+  }
+}
+
+.paint-pallete-grid_cell--notSelected {
+  border: 1px solid #000000FF;
+  border-radius: 7px;
+  transition: transform 0.3s ease-in-out;
+
+  @media (max-width: 710px) {
+    border: 1.4px solid #000000FF;
+  }
+}
+
+.paint-pallete-grid_cell:hover {
+  transform: scale(0.9);
+}
+
+.paint-pallete-grid_cell:active {
+  transform: scale(1.1);
+}
+
+
+.paint-palette-close-button{
+  width: 26px;
+  height: 26px;
+  background: #bd473aFF;
+  border: 2px solid #000000FF;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: -2px;
+  right: -18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #fff;
+  font-size: 20px;
+  user-select: none;
+  @media (max-width: 710px) {
+    width: 35px;
+    height: 35px;
+    right: -25px;
+  }
+}
+
+.paint-palette-delete-button--off{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  bottom: -30px;
+  width: 130px;
+  height: 28px;
+  background: #a8abaeFF;
+  border: 1px solid #000000FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #fff;
+  font-size: 17px;
+  user-select: none;
+}
+
+.paint-palette-delete-button--on{
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  bottom: -30px;
+  width: 130px;
+  height: 28px;
+  background: #ee4848FF;
+  border: 1px solid #000000FF;
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pixelify-Sans';
+  color: #fff;
+  font-size: 17px;
+  user-select: none;
+}
+
+
+@keyframes floatPrompt {
+  0%, 100% {
+    transform: translate(0%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(0%, -50%) translateY(-5px);
+  }
+}
+
+
+
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 100%) scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -20%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.countdown-container {
+  width: 131px;
+  height: 84px;
+  background: #914ed5FF;
+  border: 3px solid #914ed5FF;
+  border-radius: 10px;
+  box-shadow: 4px 4px 4px 0px #00000033;
+  position: absolute;
+  right: 0px;
+  top: 64px;
+  font-family: 'Pixelify-Sans';
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.countdown{
+  color: white;
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

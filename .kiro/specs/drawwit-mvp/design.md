@@ -154,8 +154,8 @@ These endpoints handle game-specific data stored in Redis using the match ID:
 ```typescript
 
 // Reddit Voting Integration
-POST /api/upvotecanvas            // Handles upvoting a specific canvas
-POST /api/downvotecanvas          // Handles downvoting a specific canvas
+POST /api/upvotecanvas            // Handles upvoting a specific canvasA
+POST /api/downvotecanvas          // Handles downvoting a specific canvasA
 GET /api/getvotecounts            // Retrieves current vote counts for both canvases
 
 // Match Data Management
@@ -165,9 +165,9 @@ GET /api/getcanvasdata            // Retrieves pixel data for both canvases
 POST /api/setmatchstatus          // Updates match status (active/expired/archived)
 
 // Pixel Drawing Operations
-POST /api/placepixel              // Places a single pixel on specified canvas
+POST /api/placepixel              // Places a single pixel on specified canvasA
 GET /api/getpixelcolor            // Retrieves color of specific pixel coordinates
-POST /api/updatecanvas            // Updates entire canvas data in Redis
+POST /api/updatecanvas            // Updates entire canvasA data in Redis
 
 // Player Ink Management
 GET /api/getplayerink             // Retrieves player's current ink balance
@@ -182,7 +182,7 @@ POST /api/updatefactionstats      // Updates faction statistics
 
 // Superpower System
 POST /api/purchasesuperpower      // Purchases a specific superpower for player
-POST /api/activatesuperpower      // Activates a superpower on specified canvas
+POST /api/activatesuperpower      // Activates a superpower on specified canvasA
 GET /api/getplayersuperpowers     // Retrieves player's superpower inventory
 
 // Leaderboard and Statistics
@@ -208,7 +208,7 @@ interface GameManager {
   // Redis Operations (using match ID from Reddit post ID)
   createMatchInRedis(matchId: string, prompt: string, duration: number): Promise<void>; // Initializes match data in Redis
   getMatchFromRedis(matchId: string): Promise<Match>; // Retrieves match data from Redis
-  updateCanvasInRedis(matchId: string, canvas: 'A' | 'B', pixels: string[][]): Promise<void>; // Updates canvas in Redis
+  updateCanvasInRedis(matchId: string, canvas: 'A' | 'B', pixels: string[][]): Promise<void>; // Updates canvasA in Redis
   
   // Single-Action Operations
   placePixel(matchId: string, canvas: 'A' | 'B', x: number, y: number, color: string): Promise<void>; // Places single pixel
@@ -240,13 +240,13 @@ interface InkEconomy {
 interface Match {
   id: string; // Unique identifier for the match
   prompt: string; // The word or phrase players need to draw
-  canvasA: PixelCanvas; // First faction's drawing canvas
-  canvasB: PixelCanvas; // Second faction's drawing canvas
+  canvasA: PixelCanvas; // First faction's drawing canvasA
+  canvasB: PixelCanvas; // Second faction's drawing canvasA
   createdAt: Date; // Timestamp when the match was created
   expiresAt: Date; // Timestamp when the match ends
   status: 'active' | 'expired' | 'archived'; // Current state of the match
-  votesA: number; // Total votes for canvas A
-  votesB: number; // Total votes for canvas B
+  votesA: number; // Total votes for canvasA A
+  votesB: number; // Total votes for canvasA B
   factionA: PlayerMatchInfo[]; // List of PlayerMatchInfo for all players in faction A
   factionB: PlayerMatchInfo[]; // List of PlayerMatchInfo for all players in faction B
   topCollaborators: PlayerMatchInfo[]; // Ordered list of PlayerMatchInfo by contribution (index 0 = #1 player)
@@ -280,8 +280,8 @@ interface PlayerMatchInfo {
 ### Canvas Model
 ```typescript
 interface PixelCanvas {
-  width: 100; // canvas width in pixels (fixed at 100)
-  height: 100; // canvas height in pixels (fixed at 100)
+  width: 100; // canvasA width in pixels (fixed at 100)
+  height: 100; // canvasA height in pixels (fixed at 100)
   pixels: string[][]; // 2D array of color values [x][y] representing each pixel's color
 }
 ```

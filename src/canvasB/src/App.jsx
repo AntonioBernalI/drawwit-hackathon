@@ -14,9 +14,6 @@ function App() {
 
   const [matchHash, setMatchHash] = useState({
     prompt: "loading...",
-    canvasA: Array(50)
-      .fill()
-      .map(() => Array(50).fill("#fff")),
     canvasB: Array(50)
       .fill()
       .map(() => Array(50).fill("#fff")),
@@ -193,8 +190,7 @@ function App() {
 
         const parsedRecord = {
           ...record,
-          canvasA: typeof record.canvasA === "string" ? JSON.parse(record.canvasA) : record.canvasA,
-          canvasB: typeof record.canvasB === "string" ? JSON.parse(record.canvasB) : record.canvasB,
+          canvasB: typeof record.canvasB === "string" ? JSON.parse(record.canvasB) : record.canvasB
         };
 
         setMatchHash(parsedRecord);
@@ -238,7 +234,7 @@ function App() {
 
     setMatchHash((prevHash) => ({
       ...prevHash,
-      canvasA: displayData,
+      canvasB: displayData,
     }));
     
     await devvitLog("About to fetch postId...");
@@ -251,20 +247,20 @@ function App() {
       setInk(ink);
       await devvitLog(`ink updated: ${ink}`);
 
-      const res = await fetch("/api/update-canvasA", {
+      const res = await fetch("/api/update-canvasB", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, canvasA: displayData }),
+        body: JSON.stringify({ postId, canvasB: displayData }),
       });
       
       await devvitLog(`Response status: ${res.status}`);
       const data = await res.json();
       await devvitLog(`Response data: ${JSON.stringify(data)}`);
       
-      if (!res.ok) throw new Error(data.error || "Error while updating canvas A");
-      await devvitLog("canvas update succesful");
+      if (!res.ok) throw new Error(data.error || "Error while updating canvasA A");
+      await devvitLog("canvasA update succesful");
       return data;
     } catch (err) {
       await devvitLog(`Error while updating canvasA: ${err.message}`);
@@ -294,7 +290,7 @@ function App() {
         >
           <TransformComponent>
             <DrawwitCanvas
-              canvasRawData={matchHash.canvasA}
+              canvasRawData={matchHash.canvasB}
               currentMode={currentMode}
               currentColor={currentColor}
               onCellClick={handleCellClick}

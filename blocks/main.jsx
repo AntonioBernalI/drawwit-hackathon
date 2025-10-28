@@ -102,8 +102,13 @@ Devvit.addCustomPostType({
       onMessage: (message, hook) => {},
     });
 
-    const { mount : mountDrawwitDrawingCanvas } = useWebView({
-      url: 'drawwitCanvas.html',
+    const { mount : mountDrawwitDrawingCanvasA } = useWebView({
+      url: 'drawwitCanvasA.html',
+      onMessage: (message, hook) => {},
+    });
+
+    const { mount : mountDrawwitDrawingCanvasB } = useWebView({
+      url: 'drawwitCanvasB.html',
       onMessage: (message, hook) => {},
     });
 
@@ -190,7 +195,7 @@ Devvit.addCustomPostType({
                   description="drawwit background"
                 />
                 <vstack height={"100%"} width={"100%"}>
-                  <hstack width={"100%"} height={"13.33%"}  onPress={mountDrawwitDrawingCanvas}></hstack>
+                  <hstack width={"100%"} height={"13.33%"}  onPress={mountDrawwitDrawingCanvasA}></hstack>
                   <hstack width={"100%"} height={"13.33%"} ></hstack>
                   <hstack width={"100%"} height={"14.05%"}>
                     <hstack
@@ -199,19 +204,28 @@ Devvit.addCustomPostType({
                       onPress={async () => {
                         const username = await _context.reddit.getCurrentUsername();
                         const [A, B] = upperPanel;
+                        const prevUpperPanel = upperPanel;
                         const toggledA = A === "1" ? "0" : "1";
                         const toggledB = toggledA === "1" ? "0" : B;
                         const newUpperPanel = `${toggledA}${toggledB}`;
                         const newPanelState = `${newUpperPanel}${lowerPanel}`;
                         setUpperPanel(newUpperPanel);
                         await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
-
-                        if(newUpperPanel==="10"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesA', 1);
-                        }else if (newUpperPanel==="01"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesA', -1);
+                        if (prevUpperPanel !== newUpperPanel) {
+                          if (prevUpperPanel === "10" && newUpperPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // remove like
+                          } else if (prevUpperPanel === "01" && newUpperPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // remove dislike
+                          } else if (prevUpperPanel === "00" && newUpperPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // nuevo like
+                          } else if (prevUpperPanel === "00" && newUpperPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // nuevo dislike
+                          } else if (prevUpperPanel === "01" && newUpperPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // dislike → like
+                          } else if (prevUpperPanel === "10" && newUpperPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // like → dislike
+                          }
                         }
-
                       }}
                     >
                     </hstack>
@@ -221,25 +235,38 @@ Devvit.addCustomPostType({
                       onPress={async () => {
                         const username = await _context.reddit.getCurrentUsername();
                         const [A, B] = upperPanel;
+
+                        const prevUpperPanel = upperPanel;
+
                         const toggledB = B === "1" ? "0" : "1";
                         const toggledA = toggledB === "1" ? "0" : A;
                         const newUpperPanel = `${toggledA}${toggledB}`;
                         const newPanelState = `${newUpperPanel}${lowerPanel}`;
+
                         setUpperPanel(newUpperPanel);
                         await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
 
-                        if(newUpperPanel==="10"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesA', 1);
-                        }else if (newUpperPanel==="01"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesA', -1);
+                        if (prevUpperPanel !== newUpperPanel) {
+                          if (prevUpperPanel === "10" && newUpperPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // remove like
+                          } else if (prevUpperPanel === "01" && newUpperPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // remove dislike
+                          } else if (prevUpperPanel === "00" && newUpperPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // nuevo like
+                          } else if (prevUpperPanel === "00" && newUpperPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // nuevo dislike
+                          } else if (prevUpperPanel === "01" && newUpperPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", 1); // dislike → like
+                          } else if (prevUpperPanel === "10" && newUpperPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesA", -1); // like → dislike
+                          }
                         }
-
                       }}
                     >
                     </hstack>
                   </hstack>
                   <hstack width={"100%"} height={"12.01%"}  ></hstack>
-                  <hstack width={"100%"} height={"12.97%"} ></hstack>
+                  <hstack width={"100%"} height={"12.97%"} onPress={mountDrawwitDrawingCanvasB}></hstack>
                   <hstack width={"100%"} height={"12.97%"} ></hstack>
                   <hstack width={"100%"} height={"15.01%"} >
                     <hstack
@@ -248,19 +275,32 @@ Devvit.addCustomPostType({
                       onPress={async () => {
                         const username = await _context.reddit.getCurrentUsername();
                         const [A, B] = lowerPanel;
+
+                        const prevLowerPanel = lowerPanel;
+
                         const toggledA = A === "1" ? "0" : "1";
                         const toggledB = toggledA === "1" ? "0" : B;
                         const newLowerPanel = `${toggledA}${toggledB}`;
                         const newPanelState = `${upperPanel}${newLowerPanel}`;
+
                         setLowerPanel(newLowerPanel);
                         await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
 
-                        if(newLowerPanel==="10"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesB', 1);
-                        }else if (newLowerPanel==="01"){
-                          await redis.hIncrBy(`${post.id}-match`, 'votesB', -1);
+                        if (prevLowerPanel !== newLowerPanel) {
+                          if (prevLowerPanel === "10" && newLowerPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // remove like
+                          } else if (prevLowerPanel === "01" && newLowerPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // remove dislike
+                          } else if (prevLowerPanel === "00" && newLowerPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // new like
+                          } else if (prevLowerPanel === "00" && newLowerPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // new dislike
+                          } else if (prevLowerPanel === "01" && newLowerPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // dislike → like
+                          } else if (prevLowerPanel === "10" && newLowerPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // like → dislike
+                          }
                         }
-
                       }}
                     >
                     </hstack>
@@ -270,12 +310,32 @@ Devvit.addCustomPostType({
                       onPress={async () => {
                         const username = await _context.reddit.getCurrentUsername();
                         const [A, B] = lowerPanel;
+
+                        const prevLowerPanel = lowerPanel;
+
                         const toggledB = B === "1" ? "0" : "1";
                         const toggledA = toggledB === "1" ? "0" : A;
                         const newLowerPanel = `${toggledA}${toggledB}`;
                         const newPanelState = `${upperPanel}${newLowerPanel}`;
+
                         setLowerPanel(newLowerPanel);
                         await _context.redis.set(`${username}-${postId}-upvotes`, newPanelState);
+
+                        if (prevLowerPanel !== newLowerPanel) {
+                          if (prevLowerPanel === "10" && newLowerPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // remove like
+                          } else if (prevLowerPanel === "01" && newLowerPanel === "00") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // remove dislike
+                          } else if (prevLowerPanel === "00" && newLowerPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // new like
+                          } else if (prevLowerPanel === "00" && newLowerPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // new dislike
+                          } else if (prevLowerPanel === "01" && newLowerPanel === "10") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", 1); // dislike → like
+                          } else if (prevLowerPanel === "10" && newLowerPanel === "01") {
+                            await _context.redis.hIncrBy(`${postId}-match`, "votesB", -1); // like → dislike
+                          }
+                        }
                       }}
                     >
                     </hstack>

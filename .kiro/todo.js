@@ -1,8 +1,8 @@
 // Domingo:
 // terminar barra de nivel
-// adaptar canvas para que use la ink
+// adaptar canvasA para que use la ink
 // funciones para inicializar y aumentar ink cada 30 seg
-// el canvas se pueda mostrar en el post
+// el canvasA se pueda mostrar en el post
 
 // Lunes:
 // funcionalidad de los upvotes y downvotes
