@@ -150,7 +150,7 @@ Devvit.addCustomPostType({
               width="100%"
               imageWidth={960}
               imageHeight={960}
-              resizeMode="cover"
+              resizeMode="fit"
               description="drawwit background"
             />
             <vstack height={"100%"} width={"100%"}>

@@ -7,6 +7,10 @@ function ColorPalette({ colorSetterFunction, onClose,  }) { // Asegúrate de des
   const [deleteMode, setDeleteMode] = useState("off");
 
   const handleCellClick = (color) => {
+    if (deleteMode === "on" && color !== "delete") {
+      setDeleteMode("off");
+    }
+
     let newSelectedColor;
 
     if (selectedColor === color) {
@@ -21,6 +25,7 @@ function ColorPalette({ colorSetterFunction, onClose,  }) { // Asegúrate de des
       colorSetterFunction(newSelectedColor);
     }
   };
+
 
   const colors = [
     "#FF0000", "#FAEBD7", "#8B4513", "#00FF00", "#FF00FF", "#FFFF00", "#0000FF",
