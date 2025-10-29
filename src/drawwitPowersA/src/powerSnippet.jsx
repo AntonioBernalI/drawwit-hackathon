@@ -5,7 +5,6 @@ import invert from "/invert.png";
 import pepper from "/pepper.png";
 import smudge from "/smudge.png";
 import mirror from "/mirror.png";
-import inkImage from '/ink.png';
 
 
 function ImageSpawn({powerName}) {
@@ -42,21 +41,23 @@ function ImageSpawn({powerName}) {
   )
 }
 
-function PowerItem({name, description, price, onBuy}) {
-  return (
-    <div className={'item-main-container'}>
-      <div className={'image-container'}>
-        <div className={'ink-container--price'}>
-          <img src={inkImage} className={'ink-image'} />
-          <p>{price}</p>
+function PowerSnippet({powerName, amount, onUse}) {
+  if (Number(amount) > 0){
+    return (
+      <div className={'power-snippet'}>
+        <div className={'image-container'}>
+          <ImageSpawn powerName={powerName} />
         </div>
-        <ImageSpawn powerName={name} />
+        <p className={'amount-label'}>{`x ${amount}`}</p>
+        <div className={'use-button'} onClick={onUse}>Use</div>
+        <div className={'power-name-label'}>{powerName}</div>
       </div>
-      <p className={'item-name-container'}>{name}</p>
-      <p className={'item-description-container'}>{description}</p>
-      <div className={'buy-button'} onClick={onBuy}>Buy</div>
-    </div>
-  );
+    );
+  }else{
+    return (
+      <></>
+    )
+  }
 }
 
-export default PowerItem;
+export default PowerSnippet;

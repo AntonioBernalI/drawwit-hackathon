@@ -117,6 +117,16 @@ Devvit.addCustomPostType({
       onMessage: (message, hook) => {},
     });
 
+    const { mount : mountDrawwitPowersA } = useWebView({
+      url: 'drawwitPowersA.html',
+      onMessage: (message, hook) => {},
+    });
+
+    const { mount : mountDrawwitPowersB } = useWebView({
+      url: 'drawwitPowersB.html',
+      onMessage: (message, hook) => {},
+    });
+
     if (loading) {
       return (
         <vstack width={"100%"} height={"100%"} alignment={"middle center"} backgroundColor={"#fff"}>
@@ -196,7 +206,7 @@ Devvit.addCustomPostType({
                 />
                 <vstack height={"100%"} width={"100%"}>
                   <hstack width={"100%"} height={"13.33%"}  onPress={mountDrawwitDrawingCanvasA}></hstack>
-                  <hstack width={"100%"} height={"13.33%"} ></hstack>
+                  <hstack width={"100%"} height={"13.33%"} onPress={mountDrawwitPowersA}></hstack>
                   <hstack width={"100%"} height={"14.05%"}>
                     <hstack
                       width={"50%"}
@@ -267,7 +277,7 @@ Devvit.addCustomPostType({
                   </hstack>
                   <hstack width={"100%"} height={"12.01%"}  ></hstack>
                   <hstack width={"100%"} height={"12.97%"} onPress={mountDrawwitDrawingCanvasB}></hstack>
-                  <hstack width={"100%"} height={"12.97%"} ></hstack>
+                  <hstack width={"100%"} height={"12.97%"} onPress={mountDrawwitPowersB}></hstack>
                   <hstack width={"100%"} height={"15.01%"} >
                     <hstack
                       width={"50%"}

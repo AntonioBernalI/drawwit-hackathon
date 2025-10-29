@@ -153,27 +153,6 @@ router.post('/api/get-power', async (req, res) => {
   }
 });
 
-router.post('/api/get-power', async (req, res) => {
-  try {
-    const username = await reddit.getCurrentUsername();
-    if (!username) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
-
-    const powerKey = `${username}-powers`;
-    const record = await redis.hGetAll(powerKey);
-
-    return res.status(200).json({
-      success: true,
-      username,
-      powers: record,
-    });
-  } catch (error) {
-    console.error("[ERROR] /api/get-power:", error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 
 router.get('/api/get-pixels-placed', async (_req, res) => {
   try {

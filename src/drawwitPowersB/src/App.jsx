@@ -96,24 +96,24 @@ function App() {
     }
   };
 
-  async function updateCanvasA(postId, canvasA) {
+  async function updateCanvasB(postId, canvasB) {
     try {
-      const response = await fetch("/api/update-canvasA", {
+      const response = await fetch("/api/update-canvasB", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ postId, canvasA }),
+        body: JSON.stringify({ postId, canvasB }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Failed to update canvasA");
+        throw new Error(data.error || "Failed to update canvasB");
       }
 
       return data;
     } catch (err) {
-      console.error("Error updating canvasA:", err);
+      console.error("Error updating canvasB:", err);
       return { ok: false, error: err.message };
     }
   }
@@ -186,7 +186,7 @@ function App() {
         setPowerHash(powerHash);
         const parsedRecord = {
           ...record,
-          canvasA: typeof record.canvasA === "string" ? JSON.parse(record.canvasA) : record.canvasA
+          canvasB: typeof record.canvasA === "string" ? JSON.parse(record.canvasB) : record.canvasB
         };
 
         setMatchHash(parsedRecord);
@@ -216,7 +216,7 @@ function App() {
                   try {
                     await spendPower("pepper");
                     const postId = await fetchPostId();
-                    await updateCanvasA(postId, applyPepper(matchHash.canvasA));
+                    await updateCanvasB(postId, applyPepper(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using pepper:", error);
                     await devvitLog(`Error while using pepper ${error}`);
@@ -231,7 +231,7 @@ function App() {
                   try {
                     await spendPower("flashlight");
                     const postId = await fetchPostId();
-                    await updateCanvasA(postId, applyFlashbang(matchHash.canvasA));
+                    await updateCanvasB(postId, applyFlashbang(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using flashlight:", error);
                     await devvitLog(`Error while using flashlight ${error}`);
@@ -246,7 +246,7 @@ function App() {
                   try {
                     await spendPower("smudge");
                     const postId = await fetchPostId();
-                    await updateCanvasA(postId, applySmudge(matchHash.canvasA));
+                    await updateCanvasB(postId, applySmudge(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using smudge:", error);
                     await devvitLog(`Error while using smudge ${error}`);
@@ -261,7 +261,7 @@ function App() {
                   try {
                     await spendPower("invert");
                     const postId = await fetchPostId();
-                    await updateCanvasA(postId, applyInvert(matchHash.canvasA));
+                    await updateCanvasB(postId, applyInvert(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using invert:", error);
                     await devvitLog(`Error while using invert ${error}`);
@@ -276,8 +276,7 @@ function App() {
                   try {
                     await spendPower("mirror");
                     const postId = await fetchPostId();
-                    // Choose vertical mirror by default (or use applyMirrorHorizontal if needed)
-                    await updateCanvasA(postId, applyMirrorVertical(matchHash.canvasA));
+                    await updateCanvasB(postId, applyMirrorVertical(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using mirror:", error);
                     await devvitLog(`Error while using mirror ${error}`);
@@ -292,7 +291,7 @@ function App() {
                   try {
                     await spendPower("blackout");
                     const postId = await fetchPostId();
-                    await updateCanvasA(postId, applyBlackout(matchHash.canvasA));
+                    await updateCanvasB(postId, applyBlackout(matchHash.canvasB));
                   } catch (error) {
                     console.error("Error while using blackout:", error);
                     await devvitLog(`Error while using blackout ${error}`);

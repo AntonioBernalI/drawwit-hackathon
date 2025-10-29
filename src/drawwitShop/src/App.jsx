@@ -230,8 +230,9 @@ function App() {
             onBuy={async () => {
               if (Number(ink) >= 40) {
                 await spendInk(40);
+                setInk((prevState) => prevState - 40);
                 await handleBuyPower('pepper');
-              }else{
+              } else {
                 showToast('you dont have enough ink!');
               }
             }}
@@ -243,7 +244,15 @@ function App() {
               'Floods the area with intense light, whitening all pixels.'
             }
             price={100}
-            onBuy={() => {}}
+            onBuy={async () => {
+              if (Number(ink) >= 100) {
+                await spendInk(100);
+                setInk((prevState) => prevState - 100);
+                await handleBuyPower('flashlight');
+              } else {
+                showToast('you dont have enough ink!');
+              }
+            }}
           />
 
           <PowerItem
@@ -252,16 +261,32 @@ function App() {
               'Drags pixels slightly to create a smeared effect. Perfect for distortion.'
             }
             price={150}
-            onBuy={() => {}}
+            onBuy={async () => {
+              if (Number(ink) >= 150) {
+                await spendInk(150);
+                setInk((prevState) => prevState - 150);
+                await handleBuyPower('smudge');
+              } else {
+                showToast('you dont have enough ink!');
+              }
+            }}
           />
 
           <PowerItem
             name={'invert'}
             description={
-              'Flips every color to its opposite, creating a stark negative image. A bold visual statement  or total chaos.'
+              'Flips every color to its opposite, creating a stark negative image. A bold visual statement or total chaos.'
             }
             price={600}
-            onBuy={() => {}}
+            onBuy={async () => {
+              if (Number(ink) >= 600) {
+                await spendInk(600);
+                setInk((prevState) => prevState - 600);
+                await handleBuyPower('invert');
+              } else {
+                showToast('you dont have enough ink!');
+              }
+            }}
           />
 
           <PowerItem
@@ -270,7 +295,15 @@ function App() {
               'Reflects one half of the canvas along y axis, instantly creating mirrored madness.'
             }
             price={1000}
-            onBuy={() => {}}
+            onBuy={async () => {
+              if (Number(ink) >= 1000) {
+                await spendInk(1000);
+                setInk((prevState) => prevState - 1000);
+                await handleBuyPower('mirror');
+              } else {
+                showToast('you dont have enough ink!');
+              }
+            }}
           />
 
           <PowerItem
@@ -279,7 +312,15 @@ function App() {
               'Erases the canvas completely, turning it into pure black. Permanent and absolute. Use wisely.'
             }
             price={5000}
-            onBuy={() => {}}
+            onBuy={async () => {
+              if (Number(ink) >= 5000) {
+                await spendInk(5000);
+                setInk((prevState) => prevState - 5000);
+                await handleBuyPower('blackout');
+              } else {
+                showToast('you dont have enough ink!');
+              }
+            }}
           />
         </div>
       </div>
