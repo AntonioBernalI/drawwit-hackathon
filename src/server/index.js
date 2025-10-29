@@ -1,7 +1,6 @@
 // src/server/index.js
 import express from 'express';
 import { createServer, getServerPort, reddit, redis, context} from '@devvit/web/server';
-import { media } from '@devvit/media';
 import emptyPixelData from './defaultPixelData.js';
 
 const app = express();
@@ -14,7 +13,166 @@ async function initializeInk(username){
   await redis.set(`${username}-lastInkCheck`, now.toString());
   await redis.set(`${username}-ink`, '30');
   await redis.set(`${username}-pixelsPlaced`, "0");
+  await redis.hSet(`${username}-powers`, {
+    pepper: "0",
+    flashlight: "0",
+    smudge: "0",
+    invert: "0",
+    mirror: "0",
+    blackout: "0"
+  });
 }
+
+async function initializePowers(username){
+  await redis.hSet(`${username}-powers`, {
+    pepper: "0",
+    flashlight: "0",
+    smudge: "0",
+    invert: "0",
+    mirror: "0",
+    blackout: "0"
+  });
+}
+
+router.post('/api/set-power', async (req, res) => {
+  try {
+    console.log("=== /api/set-power START ===");
+
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { requestedPower } = req.body;
+
+    if (!requestedPower) {
+      return res.status(400).json({ error: 'Power not specified' });
+    }
+
+    const validPowers = ['pepper', 'flashlight', 'smudge', 'invert', 'mirror', 'blackout'];
+    if (!validPowers.includes(requestedPower)) {
+      return res.status(400).json({ error: 'Invalid power type' });
+    }
+
+    const powerKey = `${username}-powers`;
+
+    const exists = await redis.exists(powerKey);
+    if (exists === 0) {
+      await initializePowers(username);
+    }
+
+    const newValue = await redis.hIncrBy(powerKey, requestedPower, 1);
+    console.log(`[OK] ${username} bought ${requestedPower} → new count: ${newValue}`);
+    return res.status(200).json({
+      success: true,
+      username,
+      power: requestedPower,
+      newCount: newValue,
+    });
+  } catch (error) {
+    console.error("[ERROR] /api/set-power:", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+router.post('/api/decrement-power', async (req, res) => {
+  try {
+    console.log("=== /api/decrement-power START ===");
+
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { requestedPower } = req.body;
+
+    if (!requestedPower) {
+      return res.status(400).json({ error: 'Power not specified' });
+    }
+
+    const validPowers = ['pepper', 'flashlight', 'smudge', 'invert', 'mirror', 'blackout'];
+    if (!validPowers.includes(requestedPower)) {
+      return res.status(400).json({ error: 'Invalid power type' });
+    }
+
+    const powerKey = `${username}-powers`;
+
+    const exists = await redis.exists(powerKey);
+    if (exists === 0) {
+      await initializePowers(username);
+    }
+
+    const currentValueStr = await redis.hGet(powerKey, requestedPower);
+    const currentValue = parseInt(currentValueStr, 10) || 0;
+
+    if (currentValue <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Cannot decrement. Power quantity is zero or less.',
+        username,
+        power: requestedPower,
+        currentCount: currentValue,
+      });
+    }
+    const newValue = await redis.hIncrBy(powerKey, requestedPower, -1);
+    console.log(`[OK] ${username} used ${requestedPower} → new count: ${newValue}`);
+    return res.status(200).json({
+      success: true,
+      username,
+      power: requestedPower,
+      newCount: newValue,
+    });
+  } catch (error) {
+    console.error("[ERROR] /api/decrement-power:", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+router.post('/api/get-power', async (req, res) => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+    const powerKey = `${username}-powers`;
+    const exists = await redis.exists(powerKey);
+    if (exists === 0) {
+      await initializePowers(username);
+    }
+    const powers = await redis.hGetAll(powerKey);
+    return res.status(200).json({
+      success: true,
+      username,
+      powers,
+    });
+  } catch (error) {
+    console.error("[ERROR] /api/get-power:", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post('/api/get-power', async (req, res) => {
+  try {
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const powerKey = `${username}-powers`;
+    const record = await redis.hGetAll(powerKey);
+
+    return res.status(200).json({
+      success: true,
+      username,
+      powers: record,
+    });
+  } catch (error) {
+    console.error("[ERROR] /api/get-power:", error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 router.get('/api/get-pixels-placed', async (_req, res) => {

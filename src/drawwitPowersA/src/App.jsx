@@ -24,54 +24,9 @@ function App() {
     return data;
   }
 
-  async function fetchPixelsPlaced() {
+  const handleSpendPower = async (powerName) => {
     try {
-      const response = await fetch('/api/get-pixels-placed', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.pixelsPlaced;
-    } catch (error) {
-      await devvitLog(`Failed to fetch pixels placed: ${error}`);
-      throw error;
-    }
-  }
-
-  async function spendInk(quantity) {
-    try {
-      const response = await fetch('/api/spend-ink', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ quantity }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log('Error spending ink:', data.error);
-        return;
-      }
-
-      console.log('Ink updated:', data.ink);
-      return data.ink;
-    } catch (err) {
-      console.log('Error in spendInk:', err.message);
-    }
-  }
-
-  const handleBuyPower = async (powerName) => {
-    try {
-      const response = await fetch('/api/set-power', {
+      const response = await fetch('/api/decrement-power', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,83 +38,17 @@ function App() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        await devvitLog(`power purchased: ${data}`);
-        showToast(`${powerName} purchased`);
+      if (response.ok && data.success) {
+        await devvitLog(`power spent: ${JSON.stringify(data)}`);
+        showToast(`${powerName} used`);
       } else {
         await devvitLog(`Error: ${data.error}`);
-        showToast(`something went wrong!`);
+        showToast(data.error || 'something went wrong!');
       }
     } catch (error) {
       console.error('Fetch error:', error);
     }
   };
-
-  async function updateLastInkCheck() {
-    try {
-      const response = await fetch('/api/update-last-ink-check', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      await devvitLog(`✅ Last ink check updated for ${data.username} at ${data.lastInkCheck}`);
-    } catch (error) {
-      await devvitLog(`❌ Failed to update last ink check: ${error}`);
-      console.error(error);
-    }
-  }
-
-  async function addInk(amount) {
-    try {
-      const response = await fetch('/api/add-ink', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ amount }), // 👈 CAMBIO AQUÍ
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log('Error adding ink:', data.error);
-        return;
-      }
-
-      console.log('Ink updated:', data.ink);
-      return data.ink;
-    } catch (err) {
-      console.log('Error in addInk:', err.message);
-    }
-  }
-
-  async function fetchInk() {
-    try {
-      const response = await fetch('/api/get-ink', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.ink;
-    } catch (error) {
-      await devvitLog(`Failed to fetch ink: ${error}`);
-      throw error;
-    }
-  }
 
   useEffect(() => {
     const fetchData = async () => {
