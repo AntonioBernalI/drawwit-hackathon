@@ -439,6 +439,8 @@ router.get('/api/get-post-id', async (req, res) => {
   }
 });
 
+
+
 app.post('/api/get-hash', async (req, res) => {
   const key = req.body.key;
   if (typeof key !== 'string') {
@@ -475,14 +477,45 @@ app.post("/api/update-canvasB", async (req, res) => {
   res.json({ ok: true, updated: 'canvasB' });
 });
 
+
+app.post("/api/expire-match", async (req, res) => {
+  const { postId } = context;
+  if (!postId) {
+    return res.status(400).json({ ok: false, error: 'failed to fetch post Id' });
+  }
+  await redis.hSet(`${postId}-match`, {
+    status: 'expired'
+  });
+  res.json({ ok: true, updated: 'status' });
+});
+
+router.get('/api/get-expires-at', async (req, res) => {
+  try {
+    const { postId } = context;
+    if (!postId) {
+      return res.status(400).json({ error: 'No post ID in context' });
+    }
+
+    const expiresAt = await redis.hGet(`${postId}-match`, 'expiresAt');
+
+    if (!expiresAt) {
+      return res.status(404).json({ error: 'Expiration date not found' });
+    }
+
+    res.status(200).json({ expiresAt });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch expiration date' });
+  }
+});
+
 app.post("/api/publish-match", async (req, res) => {
   const now = new Date();
   const expireDate = new Date(
     now.getFullYear(),
     now.getMonth(),
-    now.getDate() + 7,
+    now.getDate(),
     now.getHours(),
-    now.getMinutes(),
+    now.getMinutes() + 1,
     now.getSeconds(),
     now.getMilliseconds()
   );
@@ -495,6 +528,9 @@ app.post("/api/publish-match", async (req, res) => {
   if (!username) return res.status(400).json({ ok: false, error: 'username is required' });
 
   const post = await reddit.submitCustomPost({
+    userGeneratedContent: {
+      text: `Which one looks more like ${prompt}?`
+    },
     splash: { appDisplayName: `Which one looks more like ${prompt}?` },
     subredditName,
     title: `Which one looks more like ${prompt}?`,
@@ -507,7 +543,7 @@ app.post("/api/publish-match", async (req, res) => {
     canvasA: JSON.stringify(emptyPixelData),
     canvasB: JSON.stringify(emptyPixelData),
     expiresAt: expireDate.toISOString(),
-    status: 'active',
+    status: 'active', // active || expired
     votesA: '0',
     votesB: '0',
     factionA: JSON.stringify([]),

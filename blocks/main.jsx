@@ -192,8 +192,8 @@ Devvit.addCustomPostType({
             <webview width={"64.24242424%"} height={"100%"} url={"drawwitInline.html"}>
             </webview>
             <vstack width={"35.75757576%"} height={"100%"} >
-              <hstack width={"100%"} height={"18.43137255%"} backgroundColor={"rgba(255,0,255,0.48)"}>
-              </hstack>
+              <webview width={"100%"} height={"18.43137255%"} url={"drawwitTimer.html"}>
+              </webview>
               <zstack width={"100%"} height={"81.56862745%"}>
                 <image
                   url={`${upperPanel}${lowerPanel}.png`} //

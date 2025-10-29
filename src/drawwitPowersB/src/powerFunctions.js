@@ -12,7 +12,7 @@ export function applyPepper(canvas) {
 }
 
 export function applyFlashbang(canvas) {
-  const brighten = (v) => Math.min(255, v + (255 - v) * 0.7); // 70% toward white
+  const brighten = (v) => Math.min(255, v + (255 - v) * 0.3); // 30% toward white
   return canvas.map(row =>
     row.map(color => {
       const r = parseInt(color.slice(1, 3), 16);
